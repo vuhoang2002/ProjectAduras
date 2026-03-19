@@ -77,7 +77,7 @@ public class EnemyStateMachine : StateMachine
         return eCbBehavius == state;
     }
 
-    public Transform FindBestTarget()
+    public void FindBestTarget()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, 3f, playerLayer);
 
@@ -109,8 +109,7 @@ public class EnemyStateMachine : StateMachine
             }
         }
 
-        currentTarget = bestTarget;
-        return bestTarget;
+        SetTarget(bestTarget);
     }
     public void AssistRotateToTarget(float tick)
     {
@@ -129,7 +128,35 @@ public class EnemyStateMachine : StateMachine
             tick * 12f
         );
     }
+    public void SetTarget(Transform newTarget)
+    {
+        if (currentTarget != null)
+        {
+            currentTarget.TryGetComponent<Health>(out Health targetHealth);
+            if (targetHealth != null)
+            {
+                targetHealth.OnDie -= OnTargetDie;
+            }
+        }
+        currentTarget = newTarget;
+        if (currentTarget != null)
+        {
+            targetHealth = currentTarget.GetComponent<Health>();
 
+            if (targetHealth != null)
+            {
+                targetHealth.OnDie += OnTargetDie;
+            }
+        }
+    }
+    void OnTargetDie(Health deadTarget)
+    {
+        currentTarget = null;
+        targetHealth = null;
+
+        // chuyển state về idle / tìm target mới
+        _SwitchState(new EnemyIdleState(this));
+    }
 
 
 

@@ -23,6 +23,7 @@ public class StateMachine : AdurasMonobehavius
     public LayerMask groundLayer;
     public float groundCheckRadius = 0.3f;
     public Transform currentTarget;
+    public Health targetHealth;
     private bool enterCombat;
     public bool EnterCombatMode
     {

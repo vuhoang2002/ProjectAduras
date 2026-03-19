@@ -196,7 +196,8 @@ public class PlayerStateMachine : StateMachine
             }
         }
 
-        currentTarget = bestTarget;
+        //  currentTarget = bestTarget;
+        SetTarget(bestTarget);
         return bestTarget;
     }
     public void AssistRotateToTarget(float tick)
@@ -233,5 +234,35 @@ public class PlayerStateMachine : StateMachine
 
         return movement.normalized;
     }
+    public void SetTarget(Transform newTarget)
+    {
+        if (currentTarget != null)
+        {
+            currentTarget.TryGetComponent<Health>(out Health targetHealth);
+            if (targetHealth != null)
+            {
+                targetHealth.OnDie -= OnTargetDie;
+            }
+        }
 
+        currentTarget = newTarget;
+
+        if (currentTarget != null)
+        {
+            targetHealth = currentTarget.GetComponent<Health>();
+
+            if (targetHealth != null)
+            {
+                targetHealth.OnDie += OnTargetDie;
+            }
+        }
+    }
+    void OnTargetDie(Health deadTarget)
+    {
+        currentTarget = null;
+        targetHealth = null;
+
+        // chuyển state về idle / tìm target mới
+        // _SwitchState(new EnemyIdleState(this));
+    }
 }

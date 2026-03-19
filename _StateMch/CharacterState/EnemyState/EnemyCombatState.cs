@@ -103,7 +103,7 @@ public class EnemyCombatState : EnemyBaseState
     private void StartIdle()
     {
         _SMch.eCbBehavius = eCombatState.Ready;
-        _CbCtrl.SetGuard(false);
+        //_CbCtrl.SetGuard(false);
         timer = Random.Range(idleRandomTime.x, idleRandomTime.y);
     }
 
@@ -115,8 +115,8 @@ public class EnemyCombatState : EnemyBaseState
     {
         _SMch.eCbBehavius = eCombatState.Circling;
         if (Random.Range(0, 3) == 0)
-            _CbCtrl.SetGuard(true);
-        _SMch.Agent.ResetPath();
+            //   _CbCtrl.SetGuard(true);
+            _SMch.Agent.ResetPath();
         timer = Random.Range(circlingRandomTime.x, circlingRandomTime.y);
         cirlingDirection = Random.Range(0, 2) == 0 ? -1 : 1;
     }

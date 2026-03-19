@@ -12,6 +12,7 @@ public class WeaponHit : MonoBehaviour
     public int finalDamage;
     public Character attacker;
     private DamageInfo info;
+    GameObject effect;
     void Start()
     {
         weaponDamage = weaponData.damageBasic;
@@ -55,18 +56,35 @@ public class WeaponHit : MonoBehaviour
     {
         if (hitEffectPrefab != null)
         {
-            GameObject effect = Instantiate(hitEffectPrefab, hitPoint, Quaternion.LookRotation(hitNormal));
+
+            //   GameObject effect = Instantiate(hitEffectPrefab, hitPoint, Quaternion.LookRotation(hitNormal));
             // float lifetime = effect.GetComponent<ParticleSystem>().main.duration;
-            Destroy(effect, 0.3f); // tự hủy sau thời gian tồn tại của hiệu ứng
+            effect = SimpleEffectPool.Spawn(
+                 hitEffectPrefab,
+                 hitPoint,
+                  Quaternion.LookRotation(hitNormal)
+             );
+            //  Destroy(effect, 0.3f); // tự hủy sau thời gian tồn tại của hiệu ứng
+            PooledEffect p = effect.GetComponent<PooledEffect>();
+            if (p != null)
+                p.Despawn(0.3f);
         }
     }
     void CreateHitEffectObstract(Vector3 hitPoint, Vector3 hitNormal)
     {
         if (hitEffectPrefab != null)
         {
-            GameObject effect = Instantiate(hitGround, hitPoint, Quaternion.LookRotation(hitNormal));
+            //    GameObject effect = Instantiate(hitGround, hitPoint, Quaternion.LookRotation(hitNormal));
             // float lifetime = effect.GetComponent<ParticleSystem>().main.duration;
-            Destroy(effect, 0.3f); // tự hủy sau thời gian tồn tại của hiệu ứng
+            //Destroy(effect, 0.3f); // tự hủy sau thời gian tồn tại của hiệu ứng
+            effect = SimpleEffectPool.Spawn(
+                 hitGround,
+                 hitPoint,
+                  Quaternion.LookRotation(hitNormal)
+             );
+            PooledEffect p = effect.GetComponent<PooledEffect>();
+            if (p != null)
+                p.Despawn(0.3f);
         }
     }
     public void EnableCollider(bool enable, DamageInfo info)
@@ -75,7 +93,6 @@ public class WeaponHit : MonoBehaviour
         if (enable)
         {
             info._rawDamage = Mathf.RoundToInt(weaponDamage * info._damagePercent);
-
             this.info = info;
             //int damageCause = 12;
         }

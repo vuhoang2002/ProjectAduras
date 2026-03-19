@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -20,6 +21,7 @@ public class Health : MonoBehaviour
     public StatResource SP;
     private float recoverInterval = 0.3f; // Thời gian giữa các lần hồi phục
     private float timer = 0f; // Biến đếm thời gian
+    public event Action<Health> OnDie;
     void Start()
     {
         stateMachine = GetComponent<StateMachine>();
@@ -29,6 +31,8 @@ public class Health : MonoBehaviour
         SP = new StatResource(character.Stats.MaxStamina);
         MP = new StatResource(character.Stats.MaxMana);
         MAX_HEALTH = HP.max;
+
+
 
 
     }
@@ -79,6 +83,7 @@ public class Health : MonoBehaviour
     public void Die()
     {
         Debug.Log("Character has died.");
+        OnDie?.Invoke(this);
         if (transform.CompareTag(AdurasLayer.Enemy))
         {
             EnemyManager.Instance.RemoveEnemyInRange(transform.GetComponent<EnemyStateMachine>());

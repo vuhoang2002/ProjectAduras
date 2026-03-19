@@ -2,19 +2,26 @@ using UnityEngine;
 using static cbValue;
 public static class CombatProcessor
 {
-    public static int ProcessHit(Character attacker, Character defender, DamageInfo info)
+    public static int ProcessHit(Character attacker, Character defender, DamageInfo info, bool range = false)
     {
         CombatController cc = defender.GetComponent<CombatController>();
+        bool isFront;
+        if (range)
+            isFront = IsAttackFromFront(defender.transform, info._impactPos);
+        else
+        {
+            isFront = IsAttackFromFront(defender.transform, attacker.transform.position);
 
-        bool isFront = IsAttackFromFront(defender.transform, attacker.transform);
+        }
         int finalDamage = CombatProcessor.CalculateFinalDamage(
             attacker,
             defender,
             info);
         if (cc.isGuard && isFront)
         {
-            ApllyRecoil(attacker);
-            finalDamage = Mathf.RoundToInt(finalDamage * 0.6f);
+            if (!range)
+                ApllyRecoil(attacker);
+            finalDamage = Mathf.RoundToInt(finalDamage * 1f);
             defender.GetComponent<Health>().SP.Consume(finalDamage);
             return 0;
         }
@@ -69,9 +76,9 @@ public static class CombatProcessor
         }
         return bonus;
     }
-    static bool IsAttackFromFront(Transform target, Transform attacker)
+    static bool IsAttackFromFront(Transform target, Vector3 attacker)
     {
-        Vector3 dir = (attacker.position - target.position).normalized;
+        Vector3 dir = (attacker - target.position).normalized;
 
         float dot = Vector3.Dot(target.forward, dir);
 

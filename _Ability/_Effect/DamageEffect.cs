@@ -38,6 +38,7 @@ public class DamageImpatEffect : EffectDefinition
         //              target,
         //               damageInfo
         // );
+
         ctx.target.TryGetComponent(out Character target);
         Character attacker = ctx.caster.GetComponent<Character>();
         if (target == null || attacker == null)
@@ -57,13 +58,21 @@ public class DamageImpatEffect : EffectDefinition
             damageInfo._force = ctx.AttackData.forceData[0].forceDirection;
             damageInfo._knockOnEffect = ctx.AttackData.forceData[0].knockOnEffect;
         }
-        int finalDamage = CombatProcessor.CalculateFinalDamage(
+        int finalDamage = CombatProcessor.ProcessHit(
                 attacker,
                  target,
-                  damageInfo
+                  damageInfo,
+                  true
     );
-        target.GetComponent<Health>()?.TakeDamage(finalDamage, damageInfo);
-        //}
+        if (finalDamage > 0)
+        {
+            target.GetComponent<Health>()?.TakeDamage(finalDamage, damageInfo);
+        }
+        else
+        {
+            ctx.caster.GetComponent<CombatController>().DestroyEffect(ctx);
+        }
+
     }
     public override void Destroy() { }
 }

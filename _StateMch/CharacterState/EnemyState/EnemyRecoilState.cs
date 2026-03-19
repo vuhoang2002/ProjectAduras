@@ -12,6 +12,7 @@ public class EnemyRecoilState : EnemyBaseState
     public override void _OnEnter()
     {
         _SMch.eCbBehavius = eCombatState.Recoil;
+        _SMch.Agent.ResetPath();
         _SMch.Agent.enabled = false;
         _SMch._RootMotion = true;
         recoilCoroutine = _SMch.StartCoroutine(RecoilCoroutine());

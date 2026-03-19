@@ -20,8 +20,10 @@ public class SpawnProjectileEffect : EffectDefinition
 
     public override void Excute(SkillContext ctx)
     {
-        GameObject proj = Instantiate(projectilePrefab, ctx.castPos.transform.position, Quaternion.identity);
+        GameObject proj;//= Instantiate(projectilePrefab, ctx.castPos.transform.position, Quaternion.identity);
+        proj = SimpleEffectPool.Spawn(projectilePrefab, ctx.castPos.transform.position, Quaternion.identity);
         Projectile projectile = proj.GetComponent<Projectile>();
+        ctx.spawnedEffects.Add(proj);
         if (proj.TryGetComponent<ParticleSystem>(out ParticleSystem ps))
         {
             ps.Play();
@@ -37,7 +39,7 @@ public class SpawnProjectileEffect : EffectDefinition
 
         }
         projectile.SetInitialData(ctx, ctx.initialVelocity * speed, lifeTime, destroyByImpact);
-        Destroy(proj, lifeTime);
+        proj.GetComponent<PooledEffect>().Despawn(lifeTime);
 
     }
 

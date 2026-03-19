@@ -27,6 +27,7 @@ public class AdurasAnimHash
     public static readonly int HitKnockDownHash = Animator.StringToHash("HitKnockDown");
     public static readonly int HitHeadDownHash = Animator.StringToHash("HitHeadDown");
     public static readonly int Recoil = Animator.StringToHash("Recoil2");
+    public static readonly int PowerUp = Animator.StringToHash("PowerUp");
 
 
 

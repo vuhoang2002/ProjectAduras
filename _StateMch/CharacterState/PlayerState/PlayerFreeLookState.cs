@@ -12,6 +12,7 @@ public class PlayerFreeLookState : PlayerBaseState
 
     public override void _OnEnter()
     {
+        _SMch.EnterCombatMode = false;
         if (_SMch.EnterCombatMode)
         {
             _SMch.Animator.CrossFadeInFixedTime(AdurasAnimHash.CombatBlendTreeHash, 0.2f);

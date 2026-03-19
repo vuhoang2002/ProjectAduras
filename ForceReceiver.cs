@@ -12,7 +12,6 @@ public class ForceReceiver : MonoBehaviour
     public Vector3 test;
     [SerializeField] private float drag = 0.1f;
     public NavMeshAgent agent;
-    private bool isBeingForce;
     public float verticalVelocityTest = -0.5f;
     [field: SerializeField] public StateMachine StateMachine { get; private set; }
     void Start()

@@ -147,6 +147,7 @@ public static class cbValue
         public bool isCrit;
         public Vector3 _force;
         public StatPri _statScale;
+
     }
     public enum StatPri
     {

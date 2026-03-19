@@ -106,7 +106,8 @@ public class EnemyManager : MonoBehaviour
             .Where(e => e.Target != null &&
             !e.IsInState(eCombatState.Attack) &&
             !e.IsInState(eCombatState.Death) &&
-            !e.IsInState(eCombatState.Hit))
+            !e.IsInState(eCombatState.Hit) &&
+            !e.IsInState(eCombatState.Recoil))
             .ToList();
 
         if (candidates.Count == 0) return null;

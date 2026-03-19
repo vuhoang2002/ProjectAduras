@@ -18,14 +18,14 @@ public class Projectile : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void SetInitialData(SkillContext ctx, Vector3 initialVelocity, float lifeTime, bool destriyByImpact)
+    public void SetInitialData(SkillContext ctx, Vector3 initialVelocity, float lifeTime, bool destroyByImpact)
     {
         currentVelocity = initialVelocity;
         currentGravity = Physics.gravity * gravityWeight;
         this.lifeTime = lifeTime;
         target = ctx.impactPoint;
         this.context = ctx;
-        this.destroyByImpact = destriyByImpact;
+        this.destroyByImpact = destroyByImpact;
 
     }
     void Update()
@@ -76,7 +76,10 @@ public class Projectile : MonoBehaviour
         context.target = other;
         SkillImpactSystem.ApplyImpact(context);
         if (destroyByImpact)
-            Destroy(gameObject);
+        {
+            //  Destroy(gameObject);
+            GetComponent<PooledEffect>().Despawn();
+        }
     }
 
 }
